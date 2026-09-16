@@ -1,0 +1,96 @@
+
+======================================================================
+TOOL REGISTRY: 15 tools registered (requirement: 12+)
+======================================================================
+  - web_search
+  - weather_lookup
+  - calculator
+  - currency_converter
+  - unit_converter
+  - send_email
+  - create_calendar_event
+  - translate_text
+  - summarize_text
+  - sentiment_analysis
+  - stock_price_lookup
+  - database_query
+  - code_executor
+  - file_reader
+  - geolocation_lookup
+
+======================================================================
+PROOF 1: Full 8-stage pipeline, multi-tool dynamic invocation
+======================================================================
+Workflow status: completed
+Stages executed, in order:
+  1. intent_parsing         status=succeeded  duration_ms=0
+  2. planning               status=succeeded  duration_ms=0
+  3. tool_selection         status=succeeded  duration_ms=0
+  4. execution              status=succeeded  duration_ms=79
+  5. validation             status=succeeded  duration_ms=0
+  6. error_handling         status=succeeded  duration_ms=0
+  7. aggregation            status=succeeded  duration_ms=0
+  8. response_generation    status=succeeded  duration_ms=0
+Tools dynamically invoked:
+  - weather_lookup: attempt=1 cache_hit=False duration_ms=50
+  - currency_converter: attempt=1 cache_hit=False duration_ms=20
+
+Final response:
+Completed your request: "What's the weather in Tokyo and convert 200 USD to GBP".
+
+- **weather_lookup** returned: {"location": "Tokyo", "temperature": 18.9, "units": "C", "conditions": "overcast"}
+- **currency_converter** returned: {"amount": 200.0, "from": "USD", "to": "GBP", "converted": 156.0}
+
+======================================================================
+PROOF 2: Retry-with-backoff recovers a transient tool failure
+======================================================================
+Tool: stock_price_lookup
+Final status: succeeded after 2 attempt(s)
+(attempt 1 raises ToolError by design; attempt 2 succeeds — see app/tools/implementations.py)
+
+======================================================================
+PROOF 3: Redis-fallback caching turns a repeat call into a cache hit
+======================================================================
+First call:  cache_hit=False  wall_time_ms=66.49
+Second call: cache_hit=True  wall_time_ms=17.49
+
+======================================================================
+PROOF 4: Structured-output validation rejects malformed plans
+======================================================================
+Correctly rejected a 20-step plan (limit is 12):
+  1 validation error for ExecutionPlan
+
+======================================================================
+PROOF 5: Observability — in-process metrics snapshot
+======================================================================
+Counters:
+  pipeline.stage.count{stage=intent_parsing,status=ok} = 4.0
+  pipeline.stage.count{stage=planning,status=ok} = 4.0
+  pipeline.stage.count{stage=tool_selection,status=ok} = 4.0
+  cache.miss = 4.0
+  tool.success{tool=currency_converter} = 1.0
+  tool.success{tool=weather_lookup} = 2.0
+  pipeline.stage.count{stage=execution,status=ok} = 4.0
+  pipeline.stage.count{stage=validation,status=ok} = 4.0
+  pipeline.stage.count{stage=error_handling,status=ok} = 4.0
+  pipeline.stage.count{stage=aggregation,status=ok} = 4.0
+  pipeline.stage.count{stage=response_generation,status=ok} = 4.0
+  tool.retry{tool=stock_price_lookup} = 1.0
+  tool.success{tool=stock_price_lookup} = 1.0
+  cache.hit = 1.0
+Histograms (latency):
+  pipeline.stage{stage=intent_parsing}: {'count': 4, 'avg_ms': 0.08, 'p95_ms': 0.08, 'max_ms': 0.11}
+  pipeline.stage{stage=planning}: {'count': 4, 'avg_ms': 0.46, 'p95_ms': 0.41, 'max_ms': 0.9}
+  pipeline.stage{stage=tool_selection}: {'count': 4, 'avg_ms': 0.02, 'p95_ms': 0.02, 'max_ms': 0.02}
+  tool.duration_ms{tool=currency_converter}: {'count': 1, 'avg_ms': 20.0, 'p95_ms': 20, 'max_ms': 20}
+  tool.duration_ms{tool=weather_lookup}: {'count': 2, 'avg_ms': 50.0, 'p95_ms': 50, 'max_ms': 50}
+  pipeline.stage{stage=execution}: {'count': 4, 'avg_ms': 58.32, 'p95_ms': 79.68, 'max_ms': 101.61}
+  pipeline.stage{stage=validation}: {'count': 4, 'avg_ms': 0.05, 'p95_ms': 0.04, 'max_ms': 0.06}
+  pipeline.stage{stage=error_handling}: {'count': 4, 'avg_ms': 0.0, 'p95_ms': 0.0, 'max_ms': 0.0}
+  pipeline.stage{stage=aggregation}: {'count': 4, 'avg_ms': 0.01, 'p95_ms': 0.01, 'max_ms': 0.01}
+  pipeline.stage{stage=response_generation}: {'count': 4, 'avg_ms': 0.06, 'p95_ms': 0.05, 'max_ms': 0.08}
+  tool.duration_ms{tool=stock_price_lookup}: {'count': 1, 'avg_ms': 100.0, 'p95_ms': 100, 'max_ms': 100}
+
+======================================================================
+DONE — all proofs executed successfully
+======================================================================

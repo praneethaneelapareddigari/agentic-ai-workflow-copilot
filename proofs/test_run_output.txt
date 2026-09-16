@@ -1,0 +1,54 @@
+Agentic AI Workflow Copilot — Backend Test Suite Run
+Command: python3 -m pytest tests/ -v
+Date: Wed Sep 16 02:43:51 UTC 2026
+========================================================
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.3.3, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/claude/agentic-workflow-copilot/backend
+configfile: pytest.ini
+plugins: anyio-4.15.1, asyncio-0.24.0
+asyncio: mode=Mode.AUTO, default_loop_scope=None
+collecting ... collected 37 items
+
+tests/test_api.py::TestHealthEndpoint::test_health_ok PASSED             [  2%]
+tests/test_api.py::TestWorkflowEndpoints::test_create_workflow_returns_completed_status PASSED [  5%]
+tests/test_api.py::TestWorkflowEndpoints::test_get_workflow_by_id PASSED [  8%]
+tests/test_api.py::TestWorkflowEndpoints::test_get_nonexistent_workflow_404s PASSED [ 10%]
+tests/test_api.py::TestWorkflowEndpoints::test_list_workflows PASSED     [ 13%]
+tests/test_api.py::TestWorkflowEndpoints::test_empty_message_rejected PASSED [ 16%]
+tests/test_api.py::TestWorkflowEndpoints::test_metrics_endpoint_reports_counters PASSED [ 18%]
+tests/test_api.py::TestConversationEndpoints::test_conversation_persists_across_workflows PASSED [ 21%]
+tests/test_cache.py::TestCacheManager::test_set_then_get_roundtrip PASSED [ 24%]
+tests/test_cache.py::TestCacheManager::test_miss_returns_none PASSED     [ 27%]
+tests/test_cache.py::TestCacheManager::test_falls_back_to_memory_when_redis_unavailable PASSED [ 29%]
+tests/test_cache.py::TestCacheManager::test_invalidate_removes_key PASSED [ 32%]
+tests/test_cache.py::TestCacheManager::test_cache_key_deterministic PASSED [ 35%]
+tests/test_pipeline.py::TestPipelineHappyPath::test_runs_all_eight_stages_in_order PASSED [ 37%]
+tests/test_pipeline.py::TestPipelineHappyPath::test_persists_tool_calls PASSED [ 40%]
+tests/test_pipeline.py::TestPipelineHappyPath::test_multi_tool_request_invokes_multiple_tools PASSED [ 43%]
+tests/test_pipeline.py::TestPipelineHappyPath::test_final_response_is_populated PASSED [ 45%]
+tests/test_pipeline.py::TestPipelineHappyPath::test_conversation_created_and_reused PASSED [ 48%]
+tests/test_pipeline.py::TestPipelineRetryAndCaching::test_flaky_tool_recovers_via_retry PASSED [ 51%]
+tests/test_pipeline.py::TestPipelineRetryAndCaching::test_repeated_identical_request_hits_cache PASSED [ 54%]
+tests/test_pipeline.py::TestPipelinePlanValidation::test_plan_step_limit_enforced_by_schema PASSED [ 56%]
+tests/test_pipeline.py::TestPipelinePlanValidation::test_unknown_tool_in_plan_is_repaired PASSED [ 59%]
+tests/test_tools.py::TestToolImplementations::test_calculator_basic PASSED [ 62%]
+tests/test_tools.py::TestToolImplementations::test_calculator_rejects_unsafe_input PASSED [ 64%]
+tests/test_tools.py::TestToolImplementations::test_currency_converter PASSED [ 67%]
+tests/test_tools.py::TestToolImplementations::test_currency_converter_unsupported_pair PASSED [ 70%]
+tests/test_tools.py::TestToolImplementations::test_unit_converter_celsius_to_fahrenheit PASSED [ 72%]
+tests/test_tools.py::TestToolImplementations::test_weather_lookup_deterministic_per_location PASSED [ 75%]
+tests/test_tools.py::TestToolImplementations::test_database_query_filters PASSED [ 78%]
+tests/test_tools.py::TestToolImplementations::test_database_query_unknown_table PASSED [ 81%]
+tests/test_tools.py::TestToolImplementations::test_code_executor_allows_statistics PASSED [ 83%]
+tests/test_tools.py::TestToolImplementations::test_code_executor_blocks_disallowed_names PASSED [ 86%]
+tests/test_tools.py::TestToolImplementations::test_flaky_stock_price_fails_then_succeeds PASSED [ 89%]
+tests/test_tools.py::TestToolImplementations::test_sentiment_analysis PASSED [ 91%]
+tests/test_tools.py::TestToolRegistry::test_registry_has_at_least_twelve_tools PASSED [ 94%]
+tests/test_tools.py::TestToolRegistry::test_all_tools_expose_llm_schema PASSED [ 97%]
+tests/test_tools.py::TestToolRegistry::test_unknown_tool_raises PASSED   [100%]
+
+============================== 37 passed in 1.98s ==============================

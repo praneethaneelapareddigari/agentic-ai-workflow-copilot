@@ -1,0 +1,26 @@
+
+> agentic-workflow-copilot-frontend@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+
+   Linting and checking validity of types ...
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Collecting page data ...
+   Generating static pages (0/3) ...
+ ✓ Generating static pages (3/3)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (pages)                             Size     First Load JS
+┌ ○ /                                     1.63 kB        86.1 kB
+├   /_app                                 0 B            84.5 kB
+└ ○ /404                                  180 B          84.7 kB
++ First Load JS shared by all             85.4 kB
+  ├ chunks/framework-64ad27b21261a9ce.js  44.8 kB
+  ├ chunks/main-5e450df66d6c1b57.js       38.6 kB
+  └ other shared chunks (total)           1.98 kB
+
+○  (Static)  prerendered as static content
+
